@@ -30,7 +30,8 @@ const TopTen = () => {
     publicationDate: string;
   }
 
-  const { data } = useGetBooksQuery(undefined);
+  const { data } = useGetBooksQuery("");
+  console.log("the data", data);
 
   return (
     <div className="mx-5">

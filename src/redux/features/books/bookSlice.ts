@@ -1,18 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface IBook {
-  status: boolean;
-  priceRange: number;
+  searchTerm: string;
 }
 const initialState: IBook = {
-  status: false,
-  priceRange: 150,
+  searchTerm: "",
 };
 
 const bookSlice = createSlice({
   name: "book",
   initialState,
-  reducers: {},
+  reducers: {
+    setBookData: (state, action: PayloadAction<string>) => {
+      state.searchTerm = action.payload;
+    },
+  },
 });
-
+export const { setBookData } = bookSlice.actions;
 export default bookSlice.reducer;
