@@ -48,9 +48,14 @@ const AllBooks = () => {
     dispatch(setBookData(e));
   };
 
-  const { data, isLoading, error } = useGetBooksQuery({
-    searchTerm: `${searchTerm}`,
-  });
+  const { data, isLoading, error } = useGetBooksQuery(
+    {
+      searchTerm: `${searchTerm}`,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   return (
     <div className="mx-5">

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
+
 import { usePostBookMutation } from "../../redux/features/books/bookApi";
 
 const AddNewBook = () => {
@@ -31,7 +33,15 @@ const AddNewBook = () => {
     const options = {
       data: book,
     };
-    postBook(options);
+    postBook(options)
+      .unwrap()
+      .then(() => {
+        toast.success("Review Added");
+      })
+      .catch((error) => {
+        toast.error("Failed to add review");
+        console.error(error);
+      });
     setBook({
       image: "",
       title: "",

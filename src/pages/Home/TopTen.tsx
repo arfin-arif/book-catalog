@@ -1,12 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React from "react";
 import { useGetBooksQuery } from "../../redux/features/books/bookApi";
 import { Link } from "react-router-dom";
 
-const BookCard = ({ book }) => {
+interface Book {
+  _id: number;
+  image: string;
+  title: string;
+  author: string;
+  genre: string;
+  publicationDate: string;
+}
+
+interface BookCardProps {
+  book: Book;
+}
+
+const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
     <Link to={`/book-details/${book._id}`}>
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -20,30 +29,24 @@ const BookCard = ({ book }) => {
   );
 };
 
-const TopTen = () => {
-  interface IBooks {
-    _id: number;
-    image: string;
-    title: string;
-    author: string;
-    genre: string;
-    publicationDate: string;
-  }
-
-  const { data } = useGetBooksQuery("");
+const TopTen: React.FC = () => {
+  const { data } = useGetBooksQuery("", {
+    refetchOnMountOrArgChange: true,
+  });
   console.log("the data", data);
+
+  const topTenBooks: Book[] = data?.data?.slice(0, 10) || [];
 
   return (
     <div className="mx-5">
-      <h1 className="uppercase text-xl font-semibold"> top 10 recent books</h1>
-      <div className="grid grid-cols-1 gap-8 my-5   xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
-        {data?.data?.map(
-          (book: IBooks, index: React.Key | null | undefined) => (
-            <BookCard key={index} book={book} />
-          )
-        )}
+      <h1 className="uppercase text-xl font-semibold">Top 10 Recent Books</h1>
+      <div className="grid grid-cols-1 gap-8 my-5 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
+        {topTenBooks.map((book: Book, index: number) => (
+          <BookCard key={index} book={book} />
+        ))}
       </div>
     </div>
   );
 };
+
 export default TopTen;
