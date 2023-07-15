@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useSingleBooksQuery } from "../../redux/features/books/bookApi";
+import React, { useState, ChangeEvent } from "react";
+import { Link, useParams } from "react-router-dom";
+import {
+  usePostReviewsMutation,
+  useSingleBooksQuery,
+} from "../../redux/features/books/bookApi";
 
 interface Book {
   id: string;
@@ -13,60 +16,61 @@ interface Book {
 
 const BookDetailsPage: React.FC = () => {
   const { id } = useParams();
-  const { data } = useSingleBooksQuery(id);
+  const { data } = useSingleBooksQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
   const book = data?.data;
-  console.log("id and data", book);
-  // const history = useHistory();
-  // const { bookId } = useParams<{ bookId: string }>();
 
-  // // Simulated book data
-  // const [book] = useState<Book>({
-  //   // id: bookId,
-  //   title: "Book Title",
-  //   author: "Author Name",
-  //   genre: "Fiction",
-  //   publicationDate: "2022-01-01",
-  //   reviews: ["Review 1", "Review 2"],
-  // });
+  const handleDelete = (): void => {
+    // if (window.confirm("Are you sure you want to delete this book?")) {
+    // }
+  };
 
-  // const handleEdit = (): void => {
-  //   history.push(`/edit-book/${book.id}`);
-  // };
-
-  // const handleDelete = (): void => {
-  //   if (window.confirm("Are you sure you want to delete this book?")) {
-  //     // Perform delete logic
-  //     console.log("Book deleted:", book.id);
-  //     // Redirect to book list or home page
-  //     history.push("/books");
-  //   }
-  // };
+  const [postReviews, { isLoading }] = usePostReviewsMutation();
+  const [inputValue, setInputValue] = useState<string>("");
 
   const handleReviewSubmit = (
     event: React.FormEvent<HTMLFormElement>
   ): void => {
     event.preventDefault();
-    // Implement review submission logic
-    console.log("Review submitted");
+    const options = {
+      id: id,
+      data: { reviews: inputValue },
+    };
+    postReviews(options);
+    setInputValue("");
   };
-
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(event.target.value);
+  };
+  console.log(inputValue);
   return (
-    <div>
+    <div className="mx-auto max-w-[400px]">
       <h2>Title: {book?.title}</h2>
       <p>Author: {book?.author}</p>
       <p>Genre: {book?.genre}</p>
       <p>Publication Date: {book?.publicationDate}</p>
+
+      <form onSubmit={handleReviewSubmit}>
+        <input
+          onChange={handleChange}
+          value={inputValue}
+          className=""
+          placeholder="Write your review"
+        />
+        <button type="submit">Submit Review</button>
+      </form>
+
       <h3>Reviews:</h3>
       {book?.reviews?.map((review, index) => (
         <p key={index}>{review}</p>
       ))}
-      <form onSubmit={handleReviewSubmit}>
-        <textarea placeholder="Write your review" />
-        <button type="submit">Submit Review</button>
-      </form>
       <div>
-        {/* <button onClick={handleEdit}>Edit Book</button>
-        <button onClick={handleDelete}>Delete Book</button> */}
+        <Link to={`/edit-book/${id}`}>
+          {" "}
+          <button>Edit Book</button>
+        </Link>
+        <button onClick={handleDelete}>Delete Book</button>
       </div>
     </div>
   );

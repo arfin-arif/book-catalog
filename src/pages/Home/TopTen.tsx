@@ -10,7 +10,7 @@ const BookCard = ({ book }) => {
   return (
     <Link to={`/book-details/${book._id}`}>
       <div className="bg-white rounded-lg shadow-md p-6">
-        <img src={book?.image} alt="Book Image" className="w-full mb-4" />
+        <img src={book?.image} alt="Book Image" className="w-full h-28 mb-4" />
         <h2 className="text-xl font-bold mb-2">{book.title}</h2>
         <p className="text-gray-700 mb-2">{book.author}</p>
         <p className="text-gray-700 mb-2">{book.genre}</p>
