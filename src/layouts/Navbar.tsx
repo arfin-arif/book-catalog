@@ -73,7 +73,7 @@ export default function Navbar() {
               All Books
             </Link>
 
-            {user.email?.data.email && (
+            {user?.email?.data?.email && (
               <>
                 <Link
                   to="/add-new-book"
@@ -90,7 +90,7 @@ export default function Navbar() {
               </>
             )}
 
-            {!user.email?.data.email && (
+            {!user?.email?.data?.email && (
               <>
                 <Link
                   to="/signup"

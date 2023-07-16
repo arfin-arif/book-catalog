@@ -1,40 +1,30 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import { useAppDispatch } from "../../redux/hook";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { createUser } from "../../redux/features/user/userSlice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Registration: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { user, isLoading } = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleFormSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     console.log(email, password);
-    const dis = dispatch(
-      createUser({ email: email, password: password })
-    ).unwrap();
-    //   .then(() => {
-    //     toast.success("User Register");
-    //   })
-    //   .catch((error) => {
-    //     toast.error("Failed to register");
-    //     console.error(error);
-    //   });
-    // console.log(dis);
+    await dispatch(createUser({ email: email, password: password }));
   };
-
-  const handleRegistration = (email: string, password: string): void => {
-    // Implement your login logic here
-    console.log("Logging in with email:", email);
-    console.log("Password:", password);
-  };
-
-  const handleRegistrationWithGoogle = (): void => {
-    // Implement your Google login logic here
-    console.log("Logging in with Google");
-  };
+  useEffect(() => {
+    if (user?.email?.data?.email && !isLoading) {
+      localStorage.setItem("userEmail", user?.email?.data?.email); // Set the email to local storage
+      navigate("/");
+    }
+  }, [user?.email, isLoading]);
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value);
@@ -88,13 +78,6 @@ const Registration: React.FC = () => {
             type="submit"
           >
             Register
-          </button>
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={handleRegistrationWithGoogle}
-          >
-            Log in with Google
           </button>
         </div>
       </form>
