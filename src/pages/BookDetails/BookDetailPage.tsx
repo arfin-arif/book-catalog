@@ -89,6 +89,7 @@ const BookDetailsPage: React.FC = () => {
         </Link>
         <button
           onClick={handleDelete}
+          disabled={!user.email?.data?.email ? true : false}
           className="bg-red-500 text-white px-4 py-2 rounded-md"
         >
           Delete Book
