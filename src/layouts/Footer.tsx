@@ -1,11 +1,5 @@
-import React from "react";
-import logo from "../assets/images/technet-logo-white.png";
-import { RiFacebookBoxFill, RiInstagramLine } from "react-icons/ri";
 import { BsBook } from "react-icons/bs";
 export default function Footer() {
-  const date = new Date();
-  const year = date.getFullYear();
-
   return (
     <footer className="bg-white dark:bg-gray-900">
       <div className="container px-6 py-12 mx-auto">
