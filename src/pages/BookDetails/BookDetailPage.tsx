@@ -1,11 +1,13 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import {
+  useDeleteBookMutation,
   usePostReviewsMutation,
   useSingleBooksQuery,
 } from "../../redux/features/books/bookApi";
+import { useAppSelector } from "../../redux/hook";
 
 interface Book {
   id: string;
@@ -18,17 +20,16 @@ interface Book {
 
 const BookDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
+
   const { data } = useSingleBooksQuery(id, {
     refetchOnMountOrArgChange: true,
   });
   const book: Book | undefined = data?.data;
 
-  const handleDelete = (): void => {
-    // if (window.confirm("Are you sure you want to delete this book?")) {
-    // }
-  };
-
   const [postReviews, { isLoading }] = usePostReviewsMutation();
+  const [deleteBook] = useDeleteBookMutation();
   const [inputValue, setInputValue] = useState<string>("");
 
   const handleReviewSubmit = (event: FormEvent<HTMLFormElement>): void => {
@@ -49,6 +50,24 @@ const BookDetailsPage: React.FC = () => {
       });
 
     setInputValue("");
+  };
+
+  const handleDelete = () => {
+    const options = {
+      id: id,
+    };
+    if (window.confirm("Are you sure you want to delete this book?")) {
+      deleteBook(options)
+        .unwrap()
+        .then(() => {
+          toast.success("Deleted");
+          navigate("/");
+        })
+        .catch((error) => {
+          toast.error("Failed to add delete");
+          console.error(error);
+        });
+    }
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +105,7 @@ const BookDetailsPage: React.FC = () => {
         />
         <button
           type="submit"
+          disabled={!user.email?.data?.email ? true : false}
           className="bg-blue-500 text-white px-4 py-2 rounded-md mt-2"
         >
           Submit Review

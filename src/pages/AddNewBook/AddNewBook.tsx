@@ -36,10 +36,10 @@ const AddNewBook = () => {
     postBook(options)
       .unwrap()
       .then(() => {
-        toast.success("Review Added");
+        toast.success("Book Added");
       })
       .catch((error) => {
-        toast.error("Failed to add review");
+        toast.error("Failed to add Book");
         console.error(error);
       });
     setBook({
