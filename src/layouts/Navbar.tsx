@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
 import { BsBook } from "react-icons/bs";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 
 export default function Navbar() {
+  const { user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    localStorage.removeItem("userEmail");
+  };
+
   return (
     <nav x-data="{ isOpen: false }" className="relative bg-white shadow ">
       <div className="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
         <div className="flex items-center justify-between">
           <BsBook className="w-auto h-6 sm:h-7" />{" "}
           <p className="text-xl ml-2 font-extralight">Book Catalog</p>
-          {/* <img
-            className="w-auto h-6 sm:h-7"
-            src=""
-            alt=""
-          /> */}
           <div className="flex lg:hidden">
             <button
               type="button"
@@ -68,24 +70,32 @@ export default function Navbar() {
             >
               All Books
             </Link>
-            <Link
-              to="/add-new-book"
-              className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
-            >
-              Add New Book
-            </Link>
-            <Link
-              to="/signup"
-              className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
-            >
-              Sign Up
-            </Link>
-            <Link
-              to="/login"
-              className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
-            >
-              Sign In
-            </Link>
+
+            {user.email?.data.email && (
+              <Link
+                to="/add-new-book"
+                className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
+              >
+                Add New Book
+              </Link>
+            )}
+
+            {!user.email?.data.email && (
+              <>
+                <Link
+                  to="/signup"
+                  className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
+                >
+                  Sign Up
+                </Link>
+                <Link
+                  to="/login"
+                  className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
+                >
+                  Sign In
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -1,14 +1,35 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../redux/features/user/userSlice";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { user, isLoading } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     // Perform login logic with email and password values
-    handleLogin(email, password);
+    dispatch(loginUser({ email: email, password: password }));
+    console.log(email, password);
   };
+  console.log(user);
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+
+    if (user.email?.data && !isLoading) {
+      localStorage.setItem("userEmail", user.email?.data.email); // Set the email to local storage
+      navigate("/");
+    }
+  }, [user.email, isLoading]);
+
+  if (user.email && !isLoading) {
+    navigate("/");
+  }
 
   const handleLogin = (email: string, password: string): void => {
     // Implement your login logic here

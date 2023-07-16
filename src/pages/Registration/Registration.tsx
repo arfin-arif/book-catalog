@@ -1,13 +1,28 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useAppDispatch } from "../../redux/hook";
+import { createUser } from "../../redux/features/user/userSlice";
+import { toast } from "react-toastify";
 
 const Registration: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const dispatch = useAppDispatch();
+
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    // Perform login logic with email and password values
-    handleRegistration(email, password);
+    console.log(email, password);
+    const dis = dispatch(
+      createUser({ email: email, password: password })
+    ).unwrap();
+    //   .then(() => {
+    //     toast.success("User Register");
+    //   })
+    //   .catch((error) => {
+    //     toast.error("Failed to register");
+    //     console.error(error);
+    //   });
+    // console.log(dis);
   };
 
   const handleRegistration = (email: string, password: string): void => {
