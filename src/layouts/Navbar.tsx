@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { BsBook } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { setUser } from "../redux/features/user/userSlice";
 
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
+    dispatch(setUser(null));
   };
 
   return (
@@ -72,12 +74,20 @@ export default function Navbar() {
             </Link>
 
             {user.email?.data.email && (
-              <Link
-                to="/add-new-book"
-                className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
-              >
-                Add New Book
-              </Link>
+              <>
+                <Link
+                  to="/add-new-book"
+                  className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
+                >
+                  Add New Book
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="my-2 text-gray-700 transition-colors duration-300 transform  hover:text-blue-500  md:mx-4 md:my-0"
+                >
+                  Log Out
+                </button>
+              </>
             )}
 
             {!user.email?.data.email && (
