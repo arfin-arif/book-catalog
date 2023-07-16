@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { api } from "../../api/apiSlice";
+import { BASE_URL } from "../../api/apiSlice";
 
 interface IUserState {
   user: { email: string | null };
@@ -23,7 +23,7 @@ interface ICredential {
 export const createUser = createAsyncThunk(
   "user/createUser",
   async ({ email, password }: ICredential) => {
-    const response = await fetch("http://localhost:5000/register", {
+    const response = await fetch(`${BASE_URL}/register`, {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: {
@@ -31,23 +31,21 @@ export const createUser = createAsyncThunk(
       },
     });
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   }
 );
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async ({ email, password }: ICredential) => {
-    const response = await fetch("http://localhost:5000/login", {
+    const response = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json();
-    return data;
+    return await response.json();
   }
 );
 
@@ -57,7 +55,6 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<string | null>) => {
       state.user.email = action.payload;
-      localStorage.setItem("userEmail", action.payload);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;

@@ -6,6 +6,7 @@ import { setUser } from "../redux/features/user/userSlice";
 export default function Navbar() {
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
     dispatch(setUser(null));
@@ -73,7 +74,7 @@ export default function Navbar() {
               All Books
             </Link>
 
-            {user?.email?.data?.email && (
+            {user?.email && (
               <>
                 <Link
                   to="/add-new-book"
@@ -90,7 +91,7 @@ export default function Navbar() {
               </>
             )}
 
-            {!user?.email?.data?.email && (
+            {!user?.email && (
               <>
                 <Link
                   to="/signup"

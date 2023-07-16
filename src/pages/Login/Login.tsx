@@ -21,8 +21,8 @@ const Login: React.FC = () => {
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
 
-    if (user.email?.data && !isLoading) {
-      localStorage.setItem("userEmail", user.email?.data.email); // Set the email to local storage
+    if (user?.email && !isLoading) {
+      localStorage.setItem("userEmail", user.email); // Set the email to local storage
       navigate("/");
     }
   }, [user.email, isLoading]);

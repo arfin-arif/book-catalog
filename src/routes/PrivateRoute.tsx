@@ -12,7 +12,7 @@ export default function PrivateRoute({ children }: IProps) {
   if (isLoading) {
     return <p>Loading...</p>;
   }
-  if (!user.email?.data?.email && !isLoading) {
+  if (!user.email && !isLoading) {
     return <Navigate to="/login" state={{ path: pathname }} />;
   }
 

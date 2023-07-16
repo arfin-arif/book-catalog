@@ -89,7 +89,7 @@ const BookDetailsPage: React.FC = () => {
         </Link>
         <button
           onClick={handleDelete}
-          disabled={!user.email?.data?.email ? true : false}
+          disabled={!user.email ? true : false}
           className="bg-red-500 text-white px-4 py-2 rounded-md"
         >
           Delete Book
@@ -106,7 +106,7 @@ const BookDetailsPage: React.FC = () => {
         />
         <button
           type="submit"
-          disabled={!user.email?.data?.email ? true : false}
+          disabled={!user.email ? true : false}
           className="bg-blue-500 text-white px-4 py-2 rounded-md mt-2"
         >
           Submit Review

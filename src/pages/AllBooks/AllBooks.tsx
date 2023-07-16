@@ -9,7 +9,20 @@ import { useAppSelector } from "../../redux/hook";
 import { useDispatch } from "react-redux";
 import { setBookData } from "../../redux/features/books/bookSlice";
 
-const BookCard = ({ book }) => {
+interface IBooks {
+  _id: number;
+  image: string;
+  title: string;
+  author: string;
+  genre: string;
+  publicationDate: string;
+}
+
+interface BookCardProps {
+  book: IBooks;
+}
+
+const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
     <Link to={`/book-details/${book._id}`}>
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -26,14 +39,6 @@ const BookCard = ({ book }) => {
 };
 
 const AllBooks = () => {
-  interface IBooks {
-    _id: number;
-    image: string;
-    title: string;
-    author: string;
-    genre: string;
-    publicationDate: string;
-  }
   const year = new Date().getFullYear();
   const { searchTerm } = useAppSelector((state) => state.book);
   const dispatch = useDispatch();

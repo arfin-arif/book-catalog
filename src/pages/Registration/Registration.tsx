@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { createUser } from "../../redux/features/user/userSlice";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Registration: React.FC = () => {
@@ -19,10 +19,10 @@ const Registration: React.FC = () => {
     console.log(email, password);
     await dispatch(createUser({ email: email, password: password }));
   };
+  console.log(user, "user");
   useEffect(() => {
-    if (user?.email?.data?.email && !isLoading) {
-      localStorage.setItem("userEmail", user?.email?.data?.email); // Set the email to local storage
-      navigate("/");
+    if (user?.email && !isLoading) {
+      navigate("/login");
     }
   }, [user?.email, isLoading]);
 
